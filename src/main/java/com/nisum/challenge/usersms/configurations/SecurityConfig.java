@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // parece que esto se rompio en spring security 6, hay una issue diciendo que si o si necesita
                         // el new AntPathRequestMatcher o MvcPathRequestMatcher
-                        .requestMatchers(new AntPathRequestMatcher("/auth/oauth/token")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/users/oauth/token")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -1,5 +1,6 @@
 package com.nisum.challenge.usersms.services;
 
+import com.nisum.challenge.usersms.configurations.AppConfig;
 import com.nisum.challenge.usersms.domain.AuthRequest;
 import com.nisum.challenge.usersms.domain.AuthResponse;
 import com.nisum.challenge.usersms.domain.CreateUserRequest;
@@ -13,7 +14,6 @@ import com.nisum.challenge.usersms.repositories.UsersRepository;
 import com.nisum.challenge.usersms.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,11 +34,12 @@ public class UsersService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
+    private final AppConfig appConfig;
 
-    @Value("${com.nisum.challenge.usersms.validateEmailExp}")
-    private String validateEmailExp;
-    @Value("${com.nisum.challenge.usersms.validatePasswordExp}")
-    private String validatePasswordExp;
+//    @Value("${com.nisum.challenge.usersms.validateEmailExp}")
+//    private String validateEmailExp;
+//    @Value("${com.nisum.challenge.usersms.validatePasswordExp}")
+//    private String validatePasswordExp;
 
     // TODO tests unitarios
     // TODO readme y diagrama de la solucion
@@ -80,11 +81,9 @@ public class UsersService {
 
         UserEntity newUser = usersMapper.toEntity(createUserRequest);
         newUser.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
+        newUser.setToken(jwtUtils.generateToken(createUserRequest.getEmail()));
 
-        UserEntity createdUser = usersRepository.save(newUser);
-        createdUser.setToken(jwtUtils.generateToken(createdUser.getName()));
-
-        return usersMapper.toDto(createdUser);
+        return usersMapper.toDto(usersRepository.save(newUser));
     }
 
     // TODO mover las validaciones como annotations?
@@ -96,10 +95,10 @@ public class UsersService {
         if (usersRepository.existsByEmail(createUserRequest.getEmail())) {
             throw new ValidationException("El correo ya esta registrado");
         }
-        if (!createUserRequest.getEmail().matches(validateEmailExp)) {
+        if (!createUserRequest.getEmail().matches(appConfig.getValidateEmailExp())) {
             throw new ValidationException("El correo esta mal formado");
         }
-        if (!createUserRequest.getPassword().matches(validatePasswordExp)) {
+        if (!createUserRequest.getPassword().matches(appConfig.getValidatePasswordExp())) {
             throw new ValidationException("La contraseña esta mal formada");
         }
     }
