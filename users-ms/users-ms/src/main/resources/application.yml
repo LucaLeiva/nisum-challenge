@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test;MODE=MSSQLServer;INIT=CREATE SCHEMA IF NOT EXISTS [DBO]\; SET SCHEMA [DBO];
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+  jpa:
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
+  h2:
+    console:
+      enabled: true
+  flyway:
+    enabled: true
+    table: schema_version
+    baseline-on-migrate: false
+    out-of-order: false
+    locations: classpath:/db/migration
+    url: jdbc:h2:mem:test
+    user: sa
+    password: password
+    schemas: DBO
+
+server:
+  servlet:
+    context-path: /users-ms
+  port: 8080
+
+com.nisum.challenge.usersms:
+  validateEmailExp: "^[a-zA-Z]+@[a-zA-Z]+\\.(cl)$"
+  validatePasswordExp: "^[a-zA-Z0-9]{8,22}$"
