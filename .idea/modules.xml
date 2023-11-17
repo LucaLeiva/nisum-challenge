@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/nisum-challenge.iml" filepath="$PROJECT_DIR$/.idea/nisum-challenge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.nisum.challenge.users-ms.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.nisum.challenge.users-ms.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/users-ms.main.iml" filepath="$PROJECT_DIR$/.idea/modules/users-ms.main.iml" />
     </modules>
   </component>
 </project>
