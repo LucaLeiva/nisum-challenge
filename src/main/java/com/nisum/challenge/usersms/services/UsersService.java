@@ -36,17 +36,13 @@ public class UsersService {
     private final AuthenticationManager authenticationManager;
     private final AppConfig appConfig;
 
-//    @Value("${com.nisum.challenge.usersms.validateEmailExp}")
-//    private String validateEmailExp;
-//    @Value("${com.nisum.challenge.usersms.validatePasswordExp}")
-//    private String validatePasswordExp;
-
-    // TODO tests unitarios
     // TODO readme y diagrama de la solucion
     // TODO Swagger
 
     public AuthResponse authenticateAndGetToken(final AuthRequest authRequest)
             throws UnauthorizedUserException, ForbiddenUserException {
+
+        log.info("Authentication requested by user {}", authRequest.getEmail());
 
         // TODO no me gusta este try, ver como se podria optimizar
         try {
@@ -54,29 +50,36 @@ public class UsersService {
                     new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
             );
             if (!authentication.isAuthenticated()) {
-                log.error("Invalid Credentilas");
+                log.info("Invalid Credentilas for user {}", authRequest.getEmail());
                 throw new UnauthorizedUserException();
             }
         } catch (AuthenticationException e) {
-            log.error("Invalid credentials");
+            log.info("Invalid credentials for user {}", authRequest.getEmail());
             throw new UnauthorizedUserException();
         }
 
+        // no hace falta validar si no existe el usuario porque ya se hizo esa comprobacion antes
         UserEntity user = usersRepository.findByEmail(authRequest.getEmail()).get();
         if (!user.getIsActive()) {
+            log.info("The user {} is not active", authRequest.getEmail());
             throw new ForbiddenUserException(authRequest.getEmail());
         }
 
+        String token = jwtUtils.generateToken(authRequest.getEmail());
+
         user.setLastLogin(ZonedDateTime.now());
+        user.setToken(token);
         usersRepository.save(user);
 
         return AuthResponse.builder()
-                .token(jwtUtils.generateToken(authRequest.getEmail()))
+                .token(token)
                 .name(authRequest.getEmail())
                 .build();
     }
 
     public UserResponse createUser(final CreateUserRequest createUserRequest) throws ValidationException {
+        log.info("Creating user {}", createUserRequest.getEmail());
+
         validateCreateUserRequest(createUserRequest);
 
         UserEntity newUser = usersMapper.toEntity(createUserRequest);

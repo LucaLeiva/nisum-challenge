@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "19d67f5a-687c-4c6a-9b43-dabd21bb9ce8",
+		"name": "Nisum challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16152112",
+		"_collection_link": "https://martian-spaceship-962002.postman.co/workspace/Team-Workspace~eff58a4f-7204-455e-8a8d-8b52ebc55a77/collection/16152112-19d67f5a-687c-4c6a-9b43-dabd21bb9ce8?action=share&source=collection_link&creator=16152112"
+	},
+	"item": [
+		{
+			"name": "Create User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBob3RtYWlsLmNsIiwiaWF0IjoxNzAwMTg1NjE1LCJleHAiOjE3MDAxODc0MTV9.To5xAes-qqTz8TIorkOcHgWInpnOaydFkir1Pm9qx2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"luca\",\r\n    \"email\": \"luca@hotmail.cl\",\r\n    \"password\": \"adminadmin\",\r\n    \"phones\": [\r\n        {\r\n            \"number\": \"3123123\",\r\n            \"cityCode\": \"213\",\r\n            \"countryCode\": \"21\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users-ms/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users-ms",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"admin@hotmail.cl\",\r\n    \"password\": \"adminadmin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users-ms/users/oauth/token",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users-ms",
+						"users",
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
